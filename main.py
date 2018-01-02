@@ -5,8 +5,8 @@ import smtplib
 from email.mime.text import MIMEText
 
 
-driver = webdriver.Chrome()
-# driver = webdriver.Remote("http://localhost:4444/wd/hub", webdriver.DesiredCapabilities.HTMLUNITWITHJS)
+# driver = webdriver.Chrome()
+driver = webdriver.Remote("http://localhost:4444/wd/hub", webdriver.DesiredCapabilities.HTMLUNITWITHJS)
 driver.get("http://www.acorn.utoronto.ca/")
 login = driver.find_element_by_xpath("/html/body/div[2]/div/div[3]/div/div/div[2]/p[2]/a").click()
 print("able to enter username/pwd")
