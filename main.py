@@ -8,12 +8,12 @@ from datetime import datetime
 log = open("log.txt", "a")
 # driver = webdriver.Chrome()
 def renew_grade():
-    print("="*30 + '\n')
-    print("operation start at ", datetime.now(), "\n\n")
+    log.write("="*30 + '\n')
+    log.write("operation start at {}\n\n".format(datetime.now()))
     driver = webdriver.Remote("http://localhost:4444/wd/hub", webdriver.DesiredCapabilities.HTMLUNITWITHJS)
     driver.get("http://www.acorn.utoronto.ca/")
     driver.find_element_by_xpath("/html/body/div[2]/div/div[3]/div/div/div[2]/p[2]/a").click()
-    print("able to enter username/pwd")
+    log.write("able to enter username/pwd")
     username = driver.find_element_by_xpath("//*[@id=\"inputID\"]")
     username.clear()
     username.send_keys("chenmi84")
@@ -22,7 +22,7 @@ def renew_grade():
     pwd.send_keys("Harry6966xx511")
     submit = driver.find_element_by_xpath("//*[@id=\"query\"]/button")
     submit.click()
-    print("login")
+    log.write("login")
     try:
         submit.click()
     except:
@@ -51,7 +51,6 @@ def renew_grade():
         with open("grade.json", 'r') as data:
             last_ = json.load(data)
     except:
-        print("here")
         json.dump(mark, open("grade.json", 'w'))
         with open("grade.json", 'r') as data:
             last_ = json.load(data)
@@ -59,7 +58,7 @@ def renew_grade():
 
     msg = ""
     if last_ != mark:
-        print("there's something different")
+        log.write("there's something different")
         for i in mark:
             if mark[i] != last_[i]:
                 if last_[i] is None:
@@ -67,21 +66,21 @@ def renew_grade():
                 else:
                     msg += "{}'s mark is change, you get {} now\n".format(i, mark[i])
             else:
-                print(i, "is the same")
+                log.write("{} is the same".format(i))
         json.dump(mark, open("grade.json", 'w'))
     else:
-        print("everything keeps the same")
+        log.write("everything keeps the same")
 
+    if msg != '':
+        msg = MIMEText(msg)
+        me = 'autoRemainder@aspada.life'
+        you = 'chenmr9769@gmail.com'
+        msg['Subject'] = 'Your grade has been changed.'
+        msg['From'] = me
+        msg['To'] = you
 
-    msg = MIMEText(msg)
-    me = 'autoRemainder@aspada.life'
-    you = 'chenmr9769@gmail.com'
-    msg['Subject'] = 'Your grade has been changed.'
-    msg['From'] = me
-    msg['To'] = you
-
-    s = smtplib.SMTP('localhost')
-    s.sendmail(me, [you], msg.as_string())
-    s.quit()
-
+        s = smtplib.SMTP('localhost')
+        s.sendmail(me, [you], msg.as_string())
+        s.quit()
+        log.write("email has been send")
 renew_grade()
