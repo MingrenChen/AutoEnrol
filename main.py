@@ -4,15 +4,17 @@ import json
 import smtplib
 from email.mime.text import MIMEText
 from apscheduler.schedulers.blocking import BlockingScheduler
+from datetime import datetime
 
-
-
-
+global count
 # driver = webdriver.Chrome()
 def renew_grade():
+    global count
+    count += 1
+    print("operation number {}, now is".format(count), datetime.now())
     driver = webdriver.Remote("http://localhost:4444/wd/hub", webdriver.DesiredCapabilities.HTMLUNITWITHJS)
     driver.get("http://www.acorn.utoronto.ca/")
-    login = driver.find_element_by_xpath("/html/body/div[2]/div/div[3]/div/div/div[2]/p[2]/a").click()
+    driver.find_element_by_xpath("/html/body/div[2]/div/div[3]/div/div/div[2]/p[2]/a").click()
     print("able to enter username/pwd")
     username = driver.find_element_by_xpath("//*[@id=\"inputID\"]")
     username.clear()
