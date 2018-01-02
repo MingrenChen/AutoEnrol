@@ -3,15 +3,13 @@ from bs4 import BeautifulSoup
 import json
 import smtplib
 from email.mime.text import MIMEText
-from apscheduler.schedulers.blocking import BlockingScheduler
 from datetime import datetime
 
-global count
+log = open("log.txt", "a")
 # driver = webdriver.Chrome()
 def renew_grade():
-    global count
-    count += 1
-    print("operation number {}, now is".format(count), datetime.now())
+    print("="*30 + '\n')
+    print("operation start at ", datetime.now(), "\n\n")
     driver = webdriver.Remote("http://localhost:4444/wd/hub", webdriver.DesiredCapabilities.HTMLUNITWITHJS)
     driver.get("http://www.acorn.utoronto.ca/")
     driver.find_element_by_xpath("/html/body/div[2]/div/div[3]/div/div/div[2]/p[2]/a").click()
@@ -86,8 +84,4 @@ def renew_grade():
     s.sendmail(me, [you], msg.as_string())
     s.quit()
 
-
-
-scheduler = BlockingScheduler()
-scheduler.add_job(renew_grade(), 'interval', hours=1)
-scheduler.start()
+renew_grade()
