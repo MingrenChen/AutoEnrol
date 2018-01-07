@@ -47,6 +47,8 @@ def renew_grade():
     mark = {}
     for course in lst1:
         mark[course.find('td').string] = deletet(course.find(class_ = 'course-mark').string)
+        if ('\n' or '\r') in mark[course.find('td').string]:
+            log.write("a very big mistake when course is {},{}".format(course.find('td').string,deletet(course.find(class_ = 'course-mark').string)))
     try:
         with open("grade.json", 'r') as data:
             last_ = json.load(data)
